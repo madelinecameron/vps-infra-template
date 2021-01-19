@@ -1,0 +1,10 @@
+#!/bin/bash
+
+IP=""
+KEY_NAME=""
+PROJECT_NAME=""
+
+rsync -rave "ssh -i ~/.ssh/${KEY_NAME}" infra/${PROJECT_NAME}.conf root@${IP}:/etc/supervisor/conf.d;
+rsync -rave "ssh -i ~/.ssh/${KEY_NAME}" infra/${PROJECT_NAME}_http root@${IP}:/etc/nginx/sites-available;
+
+ssh root@${IP} -i ~/.ssh/${KEY_NAME} "ln -s /etc/nginx/sites-available/${PROJECT_NAME}_http /etc/nginx/sites-enabled/ && sudo service nginx reload && sudo service nginx restart && sudo supervisorctl reload && sudo supervisorctl restart ${PROJECT_NAME} && certbot --nginx"

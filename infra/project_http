@@ -1,0 +1,15 @@
+server {
+  if ($host = www.project.qnzl.co) {
+    return 301 https://$host$request_uri;
+  }
+
+  if ($host = project.qnzl.co) {
+      return 301 https://$host$request_uri;
+  }
+
+  server_name www.project.qnzl.co project.qnzl.co;
+
+  location ~ {
+    proxy_pass http://127.0.0.1:3081;
+  }
+}

@@ -1,0 +1,26 @@
+server {
+  if ($host = www.project.qnzl.co) {
+    return 301 https://$host$request_uri;
+  }
+
+  if ($host = project.qnzl.co) {
+    return 301 https://$host$request_uri;
+  }
+
+  server_name www.project.qnzl.co project.qnzl.co;
+  return 301 https://$host$request_uri;
+}
+
+server {
+  listen 443 ssl;
+  listen [::]:443 ssl;
+
+  ssl_certificate /etc/letsencrypt/live/project.qnzl.co/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/project.qnzl.co/privkey.pem;
+
+  server_name www.project.qnzl.co project.qnzl.co;
+
+  location ~ {
+    proxy_pass https://127.0.0.1:3081;
+  }
+}
